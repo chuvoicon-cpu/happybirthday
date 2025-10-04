@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Sinh Nhật Ba - Người Hùng Của Con ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* BASE & FONTS - Sang trọng hơn */
+        body {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        .script-font { font-family: 'Playfair Display', serif; } 
+        .sans-font { font-family: 'Inter', sans-serif; }
+        
+        /* COLOR PALETTE */
+        .color-gold { color: #D4AF37; } /* Vàng đồng */
+        .bg-burgundy { background-color: #800020; } /* Đỏ rượu */
+        .text-burgundy { color: #800020; }
+        .bg-cream { background-color: #FFFDD0; } /* Kem nhạt */
+        .bg-dark-cream { background-color: #F8F8E3; } /* Kem hơi đậm */
+        
+        /* INTRO & EFFECTS */
+        .intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            background-color: #800020;
+            background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, #800020 70%);
+            transition: opacity 1.5s ease-out;
+        }
+
+        .candle-flame {
+            animation: flicker 1.5s ease-in-out infinite alternate;
+            box-shadow: 0 0 10px gold, 0 0 20px orange;
+        }
+        
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-1deg); opacity: 1; box-shadow: 0 0 10px #D4AF37; }
+            100% { transform: scale(1.1) rotate(1deg); opacity: 0.8; box-shadow: 0 0 20px gold; }
+        }
+        
+        .firework {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(20); opacity: 0; }
+        }
+        
+        /* ANIMATIONS */
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 40px rgba(255, 215, 0, 0.7); 
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 25px rgba(255, 215, 0, 0.9); }
+            to { text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8); }
+        }
+        
+        /* TIMELINE */
+        .timeline-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* NÂNG CẤP HOÀNH TRÁNG CHO BÁNH KEM */
+        .cake-container {
+            position: relative;
+            /* background-color: #ffffff; -> Thay thế bằng backdrop-blur/bg-white/10 */
+            border: 10px solid #D4AF37; /* Gold border dày hơn */
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.9), 0 20px 40px rgba(0,0,0,0.5); /* Shadow lớn hơn */
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .cake-light-effect {
+            /* Hiệu ứng ánh sáng nến khi chưa tắt */
+            filter: drop-shadow(0 0 20px gold) drop-shadow(0 0 10px orange);
+            transition: filter 0.5s ease-out;
+        }
+
+        .cake-light-effect.off {
+            filter: none;
+        }
+        
+        #finalMessage {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1s, transform 1s;
+        }
+
+        #finalMessage.fade-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .massive-cake-emoji {
+            font-size: 150px;
+            line-height: 1;
+            transition: transform 0.3s;
+            position: relative; /* Thêm relative cho nến */
+        }
+        
+        /* Ảnh chính Album có hiệu ứng khung ảnh */
+        #mainPhoto {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid #ddd;
+            transform: rotate(-1deg);
+            transition: transform 0.5s;
+        }
+        #mainPhoto:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 0 10px 25px rgba(128, 0, 32, 0.5);
+        }
+        
+        /* Hiệu ứng nến tắt đi */
+        #candles.off {
+            opacity: 0 !important;
+            transition: opacity 0.5s ease-out;
+        }
+
+        #scroll-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        #scroll-controls button {
+            background-color: #800020;
+            color: #D4AF37;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.3s;
+        }
+
+        /* Custom style for flyBalloon */
+        @keyframes flyAway {
+            from {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translate(calc(var(--randX) * 100vw), calc(var(--randY) * 100vh)) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        .fly-away {
+            animation: flyAway 2s ease-in forwards;
+        }
+    </style>
+</head>
+<body class="bg-cream sans-font">
+    
+    <nav id="stickyHeader" class="sticky top-0 z-50 bg-white bg-opacity-95 shadow-xl py-3 hidden">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="script-font text-2xl text-burgundy font-bold">Sinh Nhật Ba ❤️</h1>
+            <div class="space-x-4 text-sm font-medium">
+                <a href="#loi-chuc" class="text-gray-600 hover:text-burgundy transition-colors">Lời Chúc</a>
+                <a href="#album" class="text-gray-600 hover:text-burgundy transition-colors">Album</a>
+                <a href="#ky-niem" class="text-gray-600 hover:text-burgundy transition-colors">Kỷ Niệm</a>
+                <a href="#wishlist" class="text-gray-600 hover:text-burgundy transition-colors">Lời Hứa</a>
+                <a href="#banh-kem" class="text-gray-600 hover:text-burgundy transition-colors">Màn Kết</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="introScreen" class="intro-screen bg-burgundy">
+        <div class="text-center">
+            <div class="flex justify-center space-x-6 mb-8">
+                <div class="w-8 h-12 bg-white rounded-full flex items-start justify-center pt-1"><div class="candle-flame w-4 h-6 bg-yellow-400 rounded-full"></div></div>
+                <div class="w-8 h-12 bg-white rounded-full flex items-start justify-center pt-1" style="animation-delay: 0.3s;"><div class="candle-flame w-4 h-6 bg-yellow-400 rounded-full"></div></div>
+                <div class="w-8 h-12 bg-white rounded-full flex items-start justify-center pt-1" style="animation-delay: 0.6s;"><div class="candle-flame w-4 h-6 bg-yellow-400 rounded-full"></div></div>
+            </div>
+            
+            <h1 id="introTitle" class="script-font text-6xl md:text-8xl color-gold glow-text mb-8 fade-in">
+                Chúc Mừng Sinh Nhật Ba Yêu Dấu ❤️
+            </h1>
+            
+            <button id="startBtn" class="bg-gradient-to-r from-yellow-400 to-red-600 text-white px-8 py-4 rounded-full text-xl font-semibold hover:from-yellow-500 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-xl">
+                Bắt đầu hành trình kỷ niệm 🎉
+            </button>
+            <p class="text-gray-200 mt-4 text-sm">Vui lòng bật loa để có trải nghiệm tốt nhất!</p>
+        </div>
+    </div>
+
+    <div id="mainContent" class="hidden">
+        <header class="text-center py-20 bg-burgundy text-white">
+            <h1 class="script-font text-5xl md:text-7xl mb-4 glow-text">Sinh Nhật Ba - Người Hùng Của Chúng Con</h1>
+            <p class="text-xl md:text-3xl font-medium">Một ngày đặc biệt để tri ân tình yêu vô bờ của ba dành cho gia đình. 🎂❤️</p>
+        </header>
+
+        <div class="fixed top-20 left-10 z-50"><div class="balloon" onclick="flyBalloon(this)">🎈</div></div>
+        <div class="fixed top-32 right-10 z-50"><div class="balloon" onclick="flyBalloon(this)" style="animation-delay: 1s;">🎁</div></div>
+        <div class="fixed top-64 left-1/4 z-50"><div class="balloon" onclick="flyBalloon(this)" style="animation-delay: 2s;">💖</div></div>
+        <div class="fixed bottom-10 right-1/4 z-50"><div class="balloon" onclick="flyBalloon(this)" style="animation-delay: 3s;">🎉</div></div>
+
+        <section id="loi-chuc" class="container mx-auto px-6 py-16 text-center">
+            <div class="max-w-4xl mx-auto bg-white/95 rounded-3xl shadow-2xl p-8 md:p-12 fade-in">
+                <h2 class="script-font text-4xl md:text-5xl text-burgundy mb-6 color-gold">💌 Lời Chúc Chân Thành Từ Trái Tim Chúng Con</h2>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-6 font-medium">
+                    "Ba yêu dấu, ba là mặt trời sưởi ấm tổ ấm này, là ngọn hải đăng dẫn lối cho mẹ và hai chị em con. Mỗi bước đi của chúng con đều in dấu sự hy sinh và tình yêu bao la của ba. Sinh nhật này, chúng con cầu chúc ba luôn mạnh khỏe, bình an, và luôn giữ mãi nụ cười rạng rỡ. Cảm ơn ba vì đã là người cha vĩ đại nhất. Chúng con yêu ba vô điều kiện! ❤️🌹"
+                </p>
+                <div class="flex justify-center space-x-4 text-4xl color-gold">
+                    <span>✨</span>
+                    <span>👑</span>
+                    <span>💕</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="album" class="container mx-auto px-6 py-16 bg-gradient-to-r from-red-50 to-dark-cream">
+            <h2 class="script-font text-4xl md:text-5xl text-center text-burgundy mb-12 fade-in">📸 Album Kỷ Niệm Gia Đình Hạnh Phúc</h2>
+            
+            <div class="text-center mb-8 fade-in" style="animation-delay: 0.3s;">
+                <button id="prevBtn" class="bg-burgundy text-white px-6 py-2 rounded-full mr-4 hover:opacity-80 transition-colors shadow-md">← Trước</button>
+                <span id="photoCounter" class="text-lg font-semibold text-gray-700">1 / 10</span>
+                <button id="nextBtn" class="bg-burgundy text-white px-6 py-2 rounded-full ml-4 hover:opacity-80 transition-colors shadow-md">Sau →</button>
+            </div>
+            
+            <div class="max-w-4xl mx-auto mb-8 fade-in" style="animation-delay: 0.6s;">
+                <div id="mainPhoto" class="bg-white rounded-3xl p-4 md:p-8 shadow-2xl text-center cursor-pointer border-4 border-yellow-200" onclick="openLightbox(currentPhotoIndex)">
+                    <div class="bg-cream rounded-2xl p-4 md:p-8">
+                        <img id="photoDisplay" src="images/gen-h-1.jpg" alt="Family Photo" class="w-full h-auto rounded-lg mb-6 max-h-96 object-cover" style="transform: scale(1);">
+                        <h3 id="photoTitle" class="script-font text-2xl md:text-3xl font-semibold text-burgundy mb-4">Tình yêu vĩnh cửu của ba và mẹ</h3>
+                        <p id="photoDescription" class="text-gray-600 text-sm md:text-base">Những khoảnh khắc bên ba - nguồn cảm hứng của hai chị em con</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-5 md:grid-cols-10 gap-2 max-w-4xl mx-auto fade-in" style="animation-delay: 0.9s;">
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-burgundy shadow-sm" onclick="showPhoto(0)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-1.jpg" alt="Photo 1" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(1)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-2.jpg" alt="Photo 2" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(2)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-3.jpg" alt="Photo 3" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(3)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-4.jpg" alt="Photo 4" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(4)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-5.jpg" alt="Photo 5" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(5)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-6.jpg" alt="Photo 6" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(6)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-7.jpg" alt="Photo 7" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(7)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-8.jpg" alt="Photo 8" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(8)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-9.jpg" alt="Photo 9" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+                <div class="thumbnail bg-white rounded-lg p-1 md:p-2 cursor-pointer border-2 border-transparent hover:border-burgundy shadow-sm" onclick="showPhoto(9)"><div class="bg-cream rounded p-1 text-center"><img src="images/gen-h-10.jpg" alt="Photo 10" class="w-full h-12 md:h-16 object-cover rounded"></div></div>
+            </div>
+        </section>
+
+        <section id="ky-niem" class="container mx-auto px-6 py-16 bg-cream">
+            <h2 class="script-font text-4xl md:text-5xl text-center text-burgundy mb-12 fade-in">✨ Con Đường Kỷ Niệm Của Gia Đình Nhỏ</h2>
+            <div class="max-w-6xl mx-auto">
+                <div class="relative">
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-burgundy to-yellow-500 rounded-full shadow-lg"></div>
+                    
+                    <div class="timeline-item relative mb-12">
+                        <div class="flex flex-col md:flex-row items-center justify-center">
+                            <div class="bg-white rounded-2xl p-6 shadow-xl border-l-4 border-yellow-500 w-full md:w-5/12 md:mr-auto mb-4 md:mb-0">
+                                <div class="flex items-center mb-4">
+                                    <span class="text-3xl mr-4 color-gold">💍</span>
+                                    <h3 class="script-font text-2xl font-semibold text-burgundy">Cột mốc 1: Khởi đầu tổ ấm (20/3/2005)</h3>
+                                </div>
+                                <p class="text-gray-600">Khởi đầu hành trình tình yêu vĩnh cửu của ba mẹ - lời thề sắt son cho tổ ấm này.</p>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-yellow-500 rounded-full border-4 border-white shadow-xl animate-pulse"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item relative mb-12">
+                        <div class="flex flex-col md:flex-row-reverse items-center justify-center">
+                            <div class="bg-white rounded-2xl p-6 shadow-xl border-r-4 border-burgundy w-full md:w-5/12 md:ml-auto mb-4 md:mb-0">
+                                <div class="flex items-center mb-4">
+                                    <span class="text-3xl mr-4 text-pink-500">👶</span>
+                                    <h3 class="script-font text-2xl font-semibold text-burgundy">Cột mốc 2: Phùng Huyền Ngọc Ra Đời (21/1/2006)</h3>
+                                </div>
+                                <p class="text-gray-600">Niềm hạnh phúc vỡ òa đầu tiên, ba học cách trở thành người cha mẫu mực.</p>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-burgundy rounded-full border-4 border-white shadow-xl animate-pulse" style="animation-delay: 0.5s;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item relative mb-12">
+                        <div class="flex flex-col md:flex-row items-center justify-center">
+                            <div class="bg-white rounded-2xl p-6 shadow-xl border-l-4 border-yellow-500 w-full md:w-5/12 md:mr-auto mb-4 md:mb-0">
+                                <div class="flex items-center mb-4">
+                                    <span class="text-3xl mr-4 text-pink-500">🎀</span>
+                                    <h3 class="script-font text-2xl font-semibold text-burgundy">Cột mốc 3: Công Chúa Thứ Hai Phùng Ngọc Quỳnh (21/10/2013)</h3>
+                                </div>
+                                <p class="text-gray-600">Gia đình thêm rộn ràng, ba là trụ cột yêu thương của ba người phụ nữ xinh đẹp.</p>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-yellow-500 rounded-full border-4 border-white shadow-xl animate-pulse" style="animation-delay: 1s;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item relative">
+                        <div class="flex flex-col md:flex-row-reverse items-center justify-center">
+                            <div class="bg-white rounded-2xl p-6 shadow-xl border-r-4 border-burgundy w-full md:w-5/12 md:ml-auto mb-4 md:mb-0">
+                                <div class="flex items-center mb-4">
+                                    <span class="text-3xl mr-4 color-gold">👑</span>
+                                    <h3 class="script-font text-2xl font-semibold text-burgundy">Cột mốc 4: Hôm Nay - Sinh Nhật Ba</h3>
+                                </div>
+                                <p class="text-gray-600">Ngày chúng con dành trọn vẹn tình yêu và lời chúc tốt đẹp nhất đến người đàn ông tuyệt vời!</p>
+                            </div>
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-burgundy rounded-full border-4 border-white shadow-xl animate-pulse" style="animation-delay: 1.5s;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wishlist" class="container mx-auto px-6 py-16 bg-gradient-to-r from-yellow-50 to-red-50">
+            <h2 class="script-font text-4xl md:text-5xl text-center text-burgundy mb-12 fade-in">📝 Lời Hứa Tình Cảm Ba Chọn</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-2xl p-8 text-center fade-in border border-yellow-300">
+                    <p class="text-xl text-gray-700 mb-8 font-semibold">Ba yêu, ba hãy chọn một trong những **"món quà hứa hẹn"** dưới đây nhé. Chúng con sẽ thực hiện nó bằng tất cả tấm lòng!</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="promise-card bg-red-100 p-6 rounded-xl border-4 border-transparent hover:border-red-400 cursor-pointer transition-all" onclick="selectWish(0, this)">
+                            <div class="text-5xl mb-3 relative">
+                                🏡
+                                <span class="selection-check absolute top-0 right-0 text-green-500 text-3xl hidden">✅</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-burgundy">Lời Hứa Số 1: Dọn Dẹp Nhà Cửa</h3>
+                            <p class="text-gray-600 mt-2">Hai chị em hứa sẽ dọn dẹp nhà cửa gọn gàng, để ba có thêm thời gian nghỉ ngơi!</p>
+                        </div>
+                        <div class="promise-card bg-yellow-100 p-6 rounded-xl border-4 border-transparent hover:border-yellow-400 cursor-pointer transition-all" onclick="selectWish(1, this)">
+                            <div class="text-5xl mb-3 relative">
+                                ✈️
+                                <span class="selection-check absolute top-0 right-0 text-green-500 text-3xl hidden">✅</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-burgundy">Lời Hứa Số 2: Chuyến Đi Bất Ngờ</h3>
+                            <p class="text-gray-600 mt-2">Cả nhà sẽ cùng nhau lên kế hoạch một chuyến đi ngắn (do con gái lớn chi trả)!</p>
+                        </div>
+                        <div class="promise-card bg-blue-100 p-6 rounded-xl border-4 border-transparent hover:border-blue-400 cursor-pointer transition-all" onclick="selectWish(2, this)">
+                            <div class="text-5xl mb-3 relative">
+                                💬
+                                <span class="selection-check absolute top-0 right-0 text-green-500 text-3xl hidden">✅</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-burgundy">Lời Hứa Số 3: Lắng Nghe Ba</h3>
+                            <p class="text-gray-600 mt-2">Hai chị em hứa sẽ dành ít nhất 1 giờ mỗi ngày để tâm sự và lắng nghe ba!</p>
+                        </div>
+                    </div>
+                    <p id="wishResult" class="text-2xl mt-8 font-bold text-burgundy hidden">Ba đã chọn: Lời Hứa Số 1! Chúng con sẽ thực hiện ngay!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="loi-nhan" class="container mx-auto px-6 py-16 bg-gradient-to-r from-dark-cream to-red-50">
+            <h2 class="script-font text-4xl md:text-5xl text-center text-burgundy mb-12 fade-in">💬 Lời Chúc Ấm Áp Từ Mẹ Và Hai Con Gái</h2>
+            <div class="max-w-4xl mx-auto">
+                <div id="messageCarousel" class="bg-white rounded-3xl shadow-2xl p-8 text-center fade-in border border-yellow-300 min-h-[300px] flex items-center justify-center">
+                </div>
+                <div class="flex justify-center mt-6 space-x-2">
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-burgundy" onclick="showMessage(0)"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300" onclick="showMessage(1)"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300" onclick="showMessage(2)"></button>
+                </div>
+            </div>
+        </section>
+
+        <section id="banh-kem" class="container mx-auto px-6 py-20 text-center bg-burgundy text-white relative overflow-hidden">
+            
+            <div id="candleGlowLayer" class="absolute inset-0 transition-opacity duration-1000" style="background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, rgba(128, 0, 32, 0.9) 70%);"></div>
+
+            <h2 class="script-font text-5xl md:text-7xl color-gold mb-12 glow-text fade-in relative z-10">
+                💫 Khoảnh Khắc Lắng Đọng: Ba Ước Nguyện! 💫
+            </h2>
+            
+            <div class="max-w-xl mx-auto relative z-10">
+                <div id="birthdayCake" class="cake-container rounded-3xl p-10 md:p-16 cursor-pointer transform hover:scale-[1.02] transition-all duration-500 bg-white/10 backdrop-blur-sm" onclick="makeAWish()">
+                    <div id="cakeBody" class="cake-light-effect">
+                        
+                        <div class="massive-cake-emoji mb-6 relative">
+                            🎂 
+                            <div id="candles" class="absolute top-[-25px] left-1/2 transform -translate-x-1/2 flex justify-center space-x-3 transition-opacity duration-500">
+                                <div class="w-5 h-8 bg-gold-600 rounded-full flex items-start justify-center pt-0.5" style="background-color: #D4AF37; animation-delay: 0.1s;"><div class="candle-flame w-2.5 h-4 bg-yellow-300 rounded-full"></div></div>
+                                <div class="w-5 h-8 bg-gold-600 rounded-full flex items-start justify-center pt-0.5" style="background-color: #D4AF37;"><div class="candle-flame w-2.5 h-4 bg-yellow-300 rounded-full"></div></div>
+                                <div class="w-5 h-8 bg-gold-600 rounded-full flex items-start justify-center pt-0.5" style="background-color: #D4AF37; animation-delay: 0.2s;"><div class="candle-flame w-2.5 h-4 bg-yellow-300 rounded-full"></div></div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="script-font text-3xl text-burgundy font-bold mb-4 color-gold" style="text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);">BA ƠI, NHẮM MẮT LẠI VÀ THỔI NẾN!</h3>
+                        <p class="text-xl text-gray-700 font-medium">✨ Nhấn vào chiếc bánh để ước nguyện và khám phá **MÓN QUÀ BÍ MẬT** ở cuối trang! ✨</p>
+                    </div>
+                </div>
+                
+                <div id="finalMessage" class="mt-12 p-10 bg-white/20 rounded-xl border-4 border-yellow-400 backdrop-blur-lg hidden transition-all duration-1000">
+                    <h3 class="script-font text-6xl color-gold glow-text mb-6">ƯỚC NGUYỆN CỦA NGƯỜI HÙNG ĐÃ THÀNH SỰ THẬT! 🥳</h3>
+                    <p class="text-3xl text-gray-100 font-semibold mb-4">Ba Ơi, Cảm Ơn Ba Vì Tất Cả! ❤️‍🔥</p>
+                    <p class="text-xl text-gray-300">Chúc ba mãi là **cây đại thụ** che chở cho tổ ấm này, luôn khỏe mạnh, cười thật tươi, và hạnh phúc trọn vẹn bên mẹ và hai con gái!</p>
+                </div>
+            </div>
+            
+            <audio id="birthdaySong" src="audio/happy-birthday.mp3" preload="auto" class="hidden"></audio> 
+        </section>
+
+        <footer class="bg-black text-white py-12 text-center">
+            <p class="text-2xl mb-4 flex items-center justify-center">
+                <span class="text-yellow-400 text-3xl mr-2">👑</span> Thiết kế với tình yêu thương vô bờ bến từ mẹ và hai con gái <span class="text-red-500 ml-2">❤️</span>
+            </p>
+            <p class="text-gray-400">Sinh nhật ba - Niềm tự hào lớn nhất của gia đình</p>
+        </footer>
+
+        <div id="scroll-controls" class="hidden">
+            <button id="toggleScrollBtn" title="Tự động cuộn">
+                <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.985V5.653Z" />
+                </svg>
+                <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                </svg>
+            </button>
+            <button id="nextSectionBtn" title="Chuyển mục tiếp theo">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="bg-white rounded-2xl p-4 md:p-8 max-w-3xl w-full text-center max-h-screen overflow-auto" onclick="event.stopPropagation()">
+            <img id="lightboxImage" src="images/gen-h-1.jpg" alt="Lightbox Photo" class="w-full h-auto rounded-lg mb-6 max-h-[70vh] object-contain mx-auto">
+            <h3 class="text-2xl font-semibold mb-4 text-burgundy" id="lightboxTitle">Khoảnh khắc đẹp</h3>
+            <p class="text-gray-600 mb-6" id="lightboxDescription">Mô tả ảnh</p>
+            <button class="bg-burgundy text-white px-6 py-2 rounded-full hover:opacity-80 shadow-lg" onclick="closeLightbox()">Đóng</button>
+        </div>
+    </div>
+
+    <script>
+        let currentMessage = 0;
+        let currentPhotoIndex = 0;
+        
+        let scrollTimer;
+        let isScrolling = false;
+        const scrollSections = ['loi-chuc', 'album', 'ky-niem', 'wishlist', 'loi-nhan', 'banh-kem'];
+        let currentSectionIndex = 0;
+        const scrollInterval = 6000; 
+
+        const messages = [
+            {
+                icon: "👩",
+                from: "Từ Mẹ Yêu",
+                message: "Anh yêu, anh là người đàn ông tuyệt vời nhất trong cuộc đời em và các con. Cảm ơn anh đã là chỗ dựa vững chắc và mang lại tiếng cười cho cả nhà. Em yêu anh rất nhiều! ❤️"
+            },
+            {
+                icon: "👧",
+                from: "Phùng Huyền Ngọc",
+                message: "Ba là người hùng, là người bạn thân và là thầy giáo đầu tiên của con. Chúc ba sinh nhật thật vui, khỏe mạnh và hạnh phúc trọn vẹn bên mẹ và hai con nhé! 💕"
+            },
+            {
+                icon: "👧",
+                from: "Phùng Ngọc Quỳnh",
+                message: "Ba là người đàn ông ấm áp nhất thế giới! Con yêu những cái ôm của ba. Chúc ba luôn cười thật nhiều và mãi mãi khỏe mạnh nha ba ơi! 🎂❤️"
+            }
+        ];
+
+        // Lưu ý: Thay đổi description ở đây nếu bạn có ảnh thực tế
+        const photos = [
+            { src: "images/gen-h-1.jpg", title: "Tình yêu vĩnh cửu của ba và mẹ", description: "Ngày cưới thiêng liêng, lời thề sắt son cho tổ ấm này." },
+            { src: "images/gen-h-2.jpg", title: "Chuyến du lịch gia đình đầu tiên", description: "Kỷ niệm chuyến đi đầy ắp tiếng cười tại Đà Lạt mộng mơ." },
+            { src: "images/gen-h-3.jpg", title: "Ba và con gái lớn (Huyền Ngọc)", description: "Khoảnh khắc ba dạy con đạp xe, một kỷ niệm không bao giờ quên!" },
+            { src: "images/gen-h-4.jpg", title: "Cây đại thụ của gia đình", description: "Ba luôn là người ôm chúng con vào lòng, nơi an toàn nhất." },
+            { src: "images/gen-h-5.jpg", title: "Ba và con gái út (Ngọc Quỳnh)", description: "Cái ôm ngọt ngào và nụ cười rạng rỡ của công chúa nhỏ." },
+            { src: "images/gen-h-6.jpg", title: "Bữa tối ấm cúng", description: "Những bữa cơm ba nấu luôn là ngon nhất thế gian!" },
+            { src: "images/gen-h-7.jpg", title: "Ba trong những chuyến đi xa", description: "Dù bận rộn công việc, ba vẫn luôn dành thời gian cho chúng con." },
+            { src: "images/gen-h-8.jpg", title: "Lễ Tốt nghiệp của Huyền Ngọc", description: "Nước mắt hạnh phúc và niềm tự hào của ba." },
+            { src: "images/gen-h-9.jpg", title: "Tết đoàn viên", description: "Khoảnh khắc cả nhà mặc áo dài truyền thống chúc Tết." },
+            { src: "images/gen-h-10.jpg", title: "Chỉ đơn giản là yêu", description: "Ảnh selfie đáng yêu nhất của ba và mẹ." }
+        ];
+
+        // --- Core Functions ---
+
+        // Start the website
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const song = document.getElementById('birthdaySong');
+            song.play().catch(error => {
+                console.log("Autoplay failed, user will interact to play later.");
+            }); 
+            song.loop = true;
+            
+            createFireworks(50);
+            
+            setTimeout(() => {
+                document.getElementById('introScreen').style.opacity = '0';
+                
+                setTimeout(() => {
+                    document.getElementById('introScreen').classList.add('hidden');
+                    document.getElementById('mainContent').classList.remove('hidden');
+                    document.getElementById('stickyHeader').classList.remove('hidden');
+                    document.getElementById('scroll-controls').classList.remove('hidden'); 
+                    
+                    animateTimeline();
+                    
+                    setTimeout(startScroll, 1000); 
+                }, 1500);
+                
+            }, 500);
+        });
+
+        // Toggle sticky header visibility
+        window.onscroll = function() {
+            const header = document.getElementById('stickyHeader');
+            const mainHeader = document.querySelector('header');
+            
+            if (window.scrollY > mainHeader.offsetHeight) {
+                header.classList.remove('hidden');
+            } else {
+                header.classList.add('hidden');
+            }
+        };
+
+        // Create fireworks effect
+        function createFireworks(count = 20) {
+            const colors = ['#D4AF37', '#800020', '#ff6b6b', '#f9ca24', '#ffffff', '#ff1493']; 
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    firework.style.left = Math.random() * window.innerWidth + 'px';
+                    firework.style.top = Math.random() * (window.innerHeight / 2) + 'px'; 
+                    document.body.appendChild(firework);
+                    
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 1000);
+                }, i * 50);
+            }
+        }
+
+        // Animate timeline items
+        function animateTimeline() {
+            const items = document.querySelectorAll('.timeline-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, {
+                threshold: 0.1 
+            });
+
+            items.forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // Fly balloon away
+        function flyBalloon(balloon) {
+            // Thêm random direction cho hiệu ứng bay đi
+            const randX = (Math.random() - 0.5) * 5; 
+            const randY = - (1 + Math.random() * 2); 
+            
+            balloon.style.setProperty('--randX', randX);
+            balloon.style.setProperty('--randY', randY);
+
+            balloon.classList.add('fly-away');
+            balloon.removeAttribute('onclick'); 
+            setTimeout(() => {
+                balloon.remove();
+            }, 2000);
+        }
+
+        // Show message in carousel
+        function showMessage(index) {
+            currentMessage = index;
+            const carousel = document.getElementById('messageCarousel');
+            const message = messages[index];
+            
+            carousel.style.opacity = '0'; 
+
+            setTimeout(() => {
+                carousel.innerHTML = `
+                    <div class="message-slide p-4">
+                        <div class="text-6xl mb-4 text-burgundy">${message.icon}</div>
+                        <h3 class="script-font text-3xl font-semibold mb-4 text-burgundy">${message.from}</h3>
+                        <p class="text-lg text-gray-700 font-medium">"${message.message}"</p>
+                    </div>
+                `;
+                carousel.style.opacity = '1';
+            }, 300);
+            
+            const dots = document.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => {
+                dot.className = i === index ? 'carousel-dot w-3 h-3 rounded-full bg-burgundy' : 'carousel-dot w-3 h-3 rounded-full bg-gray-300';
+            });
+        }
+
+        // Auto-rotate messages
+        setInterval(() => {
+            currentMessage = (currentMessage + 1) % messages.length;
+            showMessage(currentMessage);
+        }, 4000);
+
+        // MÀN KẾT HOÀNH TRÁNG: Make A Wish
+        function makeAWish() {
+            pauseScroll(); 
+            
+            const candles = document.getElementById('candles');
+            const cakeBody = document.getElementById('cakeBody');
+            const finalMessage = document.getElementById('finalMessage');
+            const audio = document.getElementById('birthdaySong');
+            const glowLayer = document.getElementById('candleGlowLayer'); // Lấy lớp phủ ánh sáng
+            
+            // 1. Dừng nhạc và Tắt nến (hiệu ứng ánh sáng)
+            audio.loop = false; 
+            audio.pause();
+            
+            candles.classList.add('off'); // Ẩn nến
+            cakeBody.classList.add('off'); // Tắt hiệu ứng ánh sáng
+            glowLayer.style.opacity = '0'; // Tắt lớp phủ ánh sáng
+            
+            // 2. Kích hoạt pháo hoa rực rỡ
+            createFireworks(200); 
+            
+            // 3. Hiển thị Lời Chúc Cuối cùng (Sau khi pháo hoa bắt đầu)
+            setTimeout(() => {
+                finalMessage.classList.remove('hidden');
+                finalMessage.classList.add('fade-in'); 
+                
+                document.getElementById('scroll-controls').classList.add('hidden'); 
+                
+                // Tạm thời vô hiệu hóa nút, chỉ cho phép bấm 1 lần
+                document.getElementById('birthdayCake').onclick = null;
+            }, 800);
+        }
+
+        // Photo Gallery Functions
+        function showPhoto(index) {
+            currentPhotoIndex = index;
+            const photo = photos[index];
+            
+            const photoDisplay = document.getElementById('photoDisplay');
+            
+            photoDisplay.style.opacity = 0;
+            photoDisplay.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                photoDisplay.src = photo.src;
+                document.getElementById('photoTitle').textContent = photo.title;
+                document.getElementById('photoDescription').textContent = photo.description;
+                document.getElementById('photoCounter').textContent = `${index + 1} / ${photos.length}`;
+                
+                photoDisplay.style.opacity = 1;
+                photoDisplay.style.transform = 'scale(1)';
+            }, 300); 
+
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.remove('border-burgundy');
+                thumb.classList.add('border-transparent');
+                
+                if (i === index) {
+                    thumb.classList.remove('border-transparent');
+                    thumb.classList.add('border-burgundy');
+                }
+            });
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            currentPhotoIndex = currentPhotoIndex > 0 ? currentPhotoIndex - 1 : photos.length - 1;
+            showPhoto(currentPhotoIndex);
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            currentPhotoIndex = currentPhotoIndex < photos.length - 1 ? currentPhotoIndex + 1 : 0;
+            showPhoto(currentPhotoIndex);
+        });
+
+        // Wishlist Function
+        window.selectWish = function(index, element) {
+            const wishes = [
+                "Dọn Dẹp Nhà Cửa",
+                "Chuyến Đi Bất Ngờ",
+                "Lắng Nghe Ba"
+            ];
+
+            document.querySelectorAll('.promise-card').forEach(card => {
+                card.classList.remove('border-green-500', 'bg-green-100');
+                card.style.transform = 'scale(1)';
+                card.querySelector('.selection-check').classList.add('hidden');
+                
+                if (card.classList.contains('bg-red-100')) card.classList.add('hover:border-red-400');
+                if (card.classList.contains('bg-yellow-100')) card.classList.add('hover:border-yellow-400');
+                if (card.classList.contains('bg-blue-100')) card.classList.add('hover:border-blue-400');
+            });
+
+            element.classList.remove('hover:border-red-400', 'hover:border-yellow-400', 'hover:border-blue-400');
+            element.classList.add('border-green-500', 'bg-green-100');
+            element.style.transform = 'scale(1.05)';
+            element.querySelector('.selection-check').classList.remove('hidden');
+
+            const resultElement = document.getElementById('wishResult');
+            resultElement.textContent = `Ba đã chọn: Lời Hứa Số ${index + 1} - ${wishes[index]}! Chúng con sẽ thực hiện ngay! ❤️`;
+            resultElement.classList.remove('hidden');
+            createFireworks(10);
+        }
+
+        // Lightbox functions
+        window.openLightbox = function(photoIndex) {
+            const photo = photos[photoIndex];
+            document.getElementById('lightboxImage').src = photo.src;
+            document.getElementById('lightboxTitle').textContent = photo.title;
+            document.getElementById('lightboxDescription').textContent = photo.description;
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+
+        window.closeLightbox = function() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        // Auto-scroll control logic
+        function startScroll() {
+            if (isScrolling) return;
+            isScrolling = true;
+            document.getElementById('playIcon').classList.add('hidden');
+            document.getElementById('pauseIcon').classList.remove('hidden');
+            scrollTimer = setInterval(scrollToNextSection, scrollInterval);
+        }
+
+        function pauseScroll() {
+            isScrolling = false;
+            clearInterval(scrollTimer);
+            document.getElementById('pauseIcon').classList.add('hidden');
+            document.getElementById('playIcon').classList.remove('hidden');
+        }
+
+        function scrollToNextSection() {
+            currentSectionIndex = (currentSectionIndex + 1) % scrollSections.length;
+            const nextSectionId = scrollSections[currentSectionIndex];
+            
+            const nextSection = document.getElementById(nextSectionId);
+            if (nextSection) {
+                nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        window.addEventListener('wheel', pauseScroll);
+        window.addEventListener('touchstart', pauseScroll); 
+        document.getElementById('toggleScrollBtn').addEventListener('click', () => {
+            if (isScrolling) {
+                pauseScroll();
+            } else {
+                startScroll();
+            }
+        });
+        document.getElementById('nextSectionBtn').addEventListener('click', () => {
+            pauseScroll(); 
+            scrollToNextSection();
+        });
+
+
+        // Initialization
+        showPhoto(0);
+        showMessage(0);
+    </script>
+</body>
+</html>
